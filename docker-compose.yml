@@ -8,9 +8,6 @@ services:
     container_name: db
     ports:
       - "33060:3306"
-#    command: --init-file /data/application/init.sql
-#    volumes:
-#      - ./db/init.sql:/data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: test
@@ -18,7 +15,7 @@ services:
       MYSQL_DATABASE: trendyol_db
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 20s
+      timeout: 10s
       retries: 10
     networks:
       - test-network
@@ -38,20 +35,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/trendyol_db?characterEncoding=UTF8
     networks:
       - test-network
-
-#  database:
-#    container_name: trendyol-db
-#    image: mysql:5.7
-#    volumes:
-#      - dbdata:/var/lib/mysql
-#    restart: always
-#    environment:
-#      MYSQL_ROOT_PASSWORD: admin
-#      MYSQL_DATABASE: trendyol_db
-#      MYSQL_USER: root
-#      MYSQL_PASSWORD: 1111
-#    ports:
-#      - "33061:3306"
 
 
 
