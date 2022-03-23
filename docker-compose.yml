@@ -1,0 +1,59 @@
+version: '3.8'
+networks:
+  test-network:
+
+services:
+  db:
+    image: "mysql:latest"
+    container_name: db
+    ports:
+      - "33060:3306"
+#    command: --init-file /data/application/init.sql
+#    volumes:
+#      - ./db/init.sql:/data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: trendyol_db
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      - test-network
+
+  app_trendyol_link:
+    build: .
+    container_name: app_trendyol_link
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_USERNAME=test
+      - SPRING_DATASOURCE_PASSWORD=test
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/trendyol_db?characterEncoding=UTF8
+    networks:
+      - test-network
+
+#  database:
+#    container_name: trendyol-db
+#    image: mysql:5.7
+#    volumes:
+#      - dbdata:/var/lib/mysql
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: admin
+#      MYSQL_DATABASE: trendyol_db
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: 1111
+#    ports:
+#      - "33061:3306"
+
+
+
+
+
