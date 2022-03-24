@@ -8,12 +8,21 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Optional;
 
+import static com.trendyol.linkconverter.services.utils.QueryConstants.APP_LINK_PARAMETER_QUERY;
+import static com.trendyol.linkconverter.services.utils.QueryConstants.WEB_LINK_PARAMETER_QUERY;
+
+/**
+ * In this class made overriding the basic methods for <b>web link</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class WebLinkSearchConverter extends BaseWebLinkConverter {
+    protected static final String WEB_LINK_PATH_SEARCH = "sr";
 
     @Override
     protected LinkType outputLinkType() {
-        return LinkType.WEB_URL;
+        return LinkType.WEB_LINK;
     }
 
     @Override

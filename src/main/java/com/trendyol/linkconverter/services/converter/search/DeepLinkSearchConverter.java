@@ -10,6 +10,13 @@ import org.springframework.util.MultiValueMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.trendyol.linkconverter.services.utils.QueryConstants.*;
+
+/**
+ * In this class made overriding the basic methods for <b>deeplink</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class DeepLinkSearchConverter extends BaseDeepLinkConverter {
 

@@ -7,6 +7,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import static com.trendyol.linkconverter.services.utils.QueryConstants.APP_LINK_PARAMETER_PAGE;
+
+/**
+ * In this class made overriding the basic methods for <b>deeplink</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class DeepLinkHomeConverter extends BaseDeepLinkConverter {
 

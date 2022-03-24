@@ -7,6 +7,9 @@ import com.trendyol.linkconverter.types.PageType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Contains convertors {@link DeepLinkHomeConverter} {@link WebLinkHomeConverter} for links of type {@link PageType#HOME}
+ */
 @Component
 @RequiredArgsConstructor
 public class HomeLinkConvertExecutor implements LinkConvertExecutor {

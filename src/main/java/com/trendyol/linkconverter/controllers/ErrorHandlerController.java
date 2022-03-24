@@ -1,6 +1,6 @@
 package com.trendyol.linkconverter.controllers;
 
-import com.trendyol.linkconverter.dto.ErrorData;
+import com.trendyol.linkconverter.dto.ErrorDataDTO;
 import com.trendyol.linkconverter.types.ErrorType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,18 +22,18 @@ public class ErrorHandlerController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<ErrorData> handleValidationException(MethodArgumentNotValidException ex) {
+    public List<ErrorDataDTO> handleValidationException(MethodArgumentNotValidException ex) {
         log.error("processMethodArgumentNotValidException: exception {}", ex.getMessage(), ex);
         return ex.getBindingResult().getAllErrors().stream()
-                .map(err -> ErrorData.of(err.getDefaultMessage(), ErrorType.VALIDATION_ERROR))
+                .map(err -> ErrorDataDTO.of(err.getDefaultMessage(), ErrorType.VALIDATION_ERROR))
                 .collect(Collectors.toList());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorData handleApplicationException(Exception ex, HandlerMethod hm) {
+    public ErrorDataDTO handleApplicationException(Exception ex, HandlerMethod hm) {
         log.error("handleAllException: exception {}, method {}",
                 ex.getMessage(), hm.getMethod().getName(), ex);
-        return ErrorData.of(ex.getMessage(), ErrorType.APPLICATION_ERROR);
+        return ErrorDataDTO.of(ex.getMessage(), ErrorType.APPLICATION_ERROR);
     }
 }

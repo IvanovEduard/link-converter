@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.GenericContainer;
 
@@ -27,6 +28,7 @@ import static org.hamcrest.Matchers.nullValue;
         LinksStorageServiceImpl.class,
         com.trendyol.linkconverter.services.utils.HashGenerator.class
 })
+@TestPropertySource("classpath:source.properties")
 public class LinksStorageServiceImplIntegrationTest {
     @Autowired
     private LinksStorageRepository linksStorageRepository;
@@ -49,14 +51,14 @@ public class LinksStorageServiceImplIntegrationTest {
 
     @Test
     public void testSaveResultOfConverting() {
-        linksStorageDaoService.saveResultOfConverting(LinkDTO.of(DEEP_LINK, LinkType.DEEP_LINK), LinkDTO.of(WEB_LINK, LinkType.WEB_URL));
+        linksStorageDaoService.saveResultOfConverting(LinkDTO.of(DEEP_LINK, LinkType.DEEP_LINK), LinkDTO.of(WEB_LINK, LinkType.WEB_LINK));
         Optional<String> webLinkHash = hashGenerator.generate(WEB_LINK);
         Optional<String> deepLinkHash = hashGenerator.generate(DEEP_LINK);
         LinksStorage webLinksStorage = linksStorageRepository.findTopByLinkHash(webLinkHash.get());
         LinksStorage deepLinksStorage = linksStorageRepository.findTopByLinkHash(deepLinkHash.get());
         assertThat(webLinksStorage.getLink(), is(WEB_LINK));
         assertThat(deepLinksStorage.getLink(), is(DEEP_LINK));
-        assertThat(webLinksStorage.getLinkType(), is(LinkType.WEB_URL));
+        assertThat(webLinksStorage.getLinkType(), is(LinkType.WEB_LINK));
         assertThat(deepLinksStorage.getLinkType(), is(LinkType.DEEP_LINK));
         assertThat(webLinksStorage.getRelatedLinkId(), is(deepLinksStorage.getId()));
         assertThat(deepLinksStorage.getRelatedLinkId(), is(nullValue()));
@@ -64,7 +66,7 @@ public class LinksStorageServiceImplIntegrationTest {
 
     @Test
     public void testFindResultOfConvertingByHashOfOriginalLinkWhenDeepIsOriginal() {
-        LinkDTO webLinkDTO = LinkDTO.of(WEB_LINK, LinkType.WEB_URL);
+        LinkDTO webLinkDTO = LinkDTO.of(WEB_LINK, LinkType.WEB_LINK);
         LinkDTO deepLinkDTO = LinkDTO.of(DEEP_LINK, LinkType.DEEP_LINK);
         linksStorageDaoService.saveResultOfConverting(deepLinkDTO, webLinkDTO);
 
@@ -77,7 +79,7 @@ public class LinksStorageServiceImplIntegrationTest {
 
     @Test
     public void testFindResultOfConvertingByHashOfOriginalLinkWhenWebIsOriginal() {
-        LinkDTO webLinkDTO = LinkDTO.of(WEB_LINK, LinkType.WEB_URL);
+        LinkDTO webLinkDTO = LinkDTO.of(WEB_LINK, LinkType.WEB_LINK);
         LinkDTO deepLinkDTO = LinkDTO.of(DEEP_LINK, LinkType.DEEP_LINK);
         linksStorageDaoService.saveResultOfConverting(webLinkDTO, deepLinkDTO);
 

@@ -49,12 +49,12 @@ public class LinkConverterProcessManagerTest {
 
     @Test
     public void testFullProcess() throws ExecutionException {
-        LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL);
+        LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK);
         LinkDTO convertedLinkDTO = LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK);
         when(productLinkConvertRouter.convert(linkDTO)).thenReturn(convertedLinkDTO);
         when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.empty());
 
-        LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL));
+        LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK));
 
         verify(linksStorageService).saveResultOfConverting(linkDTO, convertedLinkDTO);
         assertThat(result, is(convertedLinkDTO));
@@ -62,11 +62,11 @@ public class LinkConverterProcessManagerTest {
 
     @Test
     public void testWhenLinkExistInDB() throws ExecutionException {
-        LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL);
+        LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK);
         LinkDTO convertedLinkDTO = LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK);
         when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.of(convertedLinkDTO));
 
-        LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL));
+        LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK));
 
         verify(linksStorageService, never()).saveResultOfConverting(linkDTO, convertedLinkDTO);
         verify(productLinkConvertRouter, never()).convert(linkDTO);
@@ -75,8 +75,8 @@ public class LinkConverterProcessManagerTest {
 
     @Test
     public void testCacheUsing() throws ExecutionException {
-        LinkDTO linkDTO2 = LinkDTO.of(WEB_LINK_TEST2, LinkType.WEB_URL);
-        LinkDTO linkDTO3 = LinkDTO.of(WEB_LINK_TEST3, LinkType.WEB_URL);
+        LinkDTO linkDTO2 = LinkDTO.of(WEB_LINK_TEST2, LinkType.WEB_LINK);
+        LinkDTO linkDTO3 = LinkDTO.of(WEB_LINK_TEST3, LinkType.WEB_LINK);
         LinkDTO convertedLinkDTO2 = LinkDTO.of(DEEP_LINK_TEST2, LinkType.DEEP_LINK);
         LinkDTO convertedLinkDTO3 = LinkDTO.of(DEEP_LINK_TEST3, LinkType.DEEP_LINK);
 

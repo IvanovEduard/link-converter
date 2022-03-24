@@ -7,6 +7,9 @@ import com.trendyol.linkconverter.types.PageType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Contains convertors {@link DeepLinkSearchConverter} {@link WebLinkSearchConverter} for links of type {@link PageType#SEARCH}
+ */
 @Component
 @RequiredArgsConstructor
 public class SearchLinkConvertExecutor implements LinkConvertExecutor {

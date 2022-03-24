@@ -12,6 +12,13 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.trendyol.linkconverter.services.utils.QueryConstants.*;
+
+/**
+ * In this class made overriding the basic methods for <b>deeplink</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class DeepLinkProductConverter extends BaseDeepLinkConverter {
     private final Pattern pattern = Pattern.compile("(-p-)(?<contentId>\\d+)");

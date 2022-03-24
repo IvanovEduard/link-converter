@@ -47,7 +47,7 @@ class LinkConverterControllerTest {
         requestBody.setLink(WEB_LINK_TEST);
         LinkDTO expectedResponse = LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK);
 
-        when(linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL)))
+        when(linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK)))
                 .thenReturn(LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK));
 
         mockMvc.perform(post(WEB_TO_DEEP_URL)
@@ -63,10 +63,10 @@ class LinkConverterControllerTest {
     void convertToWeblink() throws Exception {
         DeeplinkToConvertDTO requestBody = new DeeplinkToConvertDTO();
         requestBody.setLink(DEEP_LINK_TEST);
-        LinkDTO expectedResponse = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL);
+        LinkDTO expectedResponse = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK);
 
         when(linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK)))
-                .thenReturn(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL));
+                .thenReturn(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_LINK));
 
         mockMvc.perform(post(DEEP_TO_WEB_URL)
                         .content(objectMapper.writeValueAsString(requestBody))

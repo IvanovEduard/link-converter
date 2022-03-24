@@ -6,12 +6,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+/**
+ * In this class made overriding the basic methods for <b>web link</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class WebLinkHomeConverter extends BaseWebLinkConverter {
 
     @Override
     protected LinkType outputLinkType() {
-        return LinkType.WEB_URL;
+        return LinkType.WEB_LINK;
     }
 
     @Override

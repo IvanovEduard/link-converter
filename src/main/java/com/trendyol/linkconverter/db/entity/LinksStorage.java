@@ -5,6 +5,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * LinksStorage which is Object-Relational Mapping of <b>links_storage</b> table.
+ */
 @Entity
 @Table(name = "links_storage")
 @Data

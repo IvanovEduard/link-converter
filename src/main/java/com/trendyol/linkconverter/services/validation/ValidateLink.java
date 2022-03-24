@@ -8,6 +8,7 @@ import static com.trendyol.linkconverter.services.validation.ValidationErrorMess
 
 /**
  * This validation is used for validation link fields.
+ * The handler for this annotation is {@link LinkValidator}
  */
 @Documented
 @Target(ElementType.FIELD)

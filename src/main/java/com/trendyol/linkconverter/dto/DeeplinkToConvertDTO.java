@@ -9,6 +9,10 @@ import javax.validation.constraints.NotBlank;
 
 import static com.trendyol.linkconverter.services.validation.ValidationErrorMessage.ERROR_LINK_SHOULD_BE_PRESENT;
 
+/**
+ * Data transfer object for convert <b>deepLink</b> to <b>web link</b>
+ * {@link com.trendyol.linkconverter.controllers.LinkConverterController#convertToWeb(DeeplinkToConvertDTO)}.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

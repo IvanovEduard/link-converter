@@ -15,7 +15,7 @@ import java.util.Optional;
 import static java.util.Objects.nonNull;
 
 /**
- * DAO for links_storage table
+ * Interface implementation for access manage DB data.
  */
 @Repository
 @RequiredArgsConstructor

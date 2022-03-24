@@ -7,7 +7,7 @@ import com.trendyol.linkconverter.types.LinkType;
 import com.trendyol.linkconverter.types.PageType;
 
 /**
- * Routing the converting process
+ * This interface includes the default behavior of link converting process with implementing in {@link LinkConvertExecutor#convert(LinkDTO)}.
  */
 public interface LinkConvertExecutor {
 
@@ -20,7 +20,7 @@ public interface LinkConvertExecutor {
      */
     default LinkDTO convert(final LinkDTO linkDTO) {
         String link = linkDTO.getLink();
-        if (LinkType.WEB_URL.equals(linkDTO.getLinkType())) {
+        if (LinkType.WEB_LINK.equals(linkDTO.getLinkType())) {
             return toDeepLinkConverter().convert(link);
         }
         return toWebLinkConverter().convert(link);

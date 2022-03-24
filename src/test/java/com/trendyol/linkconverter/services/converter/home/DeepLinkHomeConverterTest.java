@@ -1,14 +1,17 @@
 package com.trendyol.linkconverter.services.converter.home;
 
+import com.trendyol.linkconverter.InjectPropertiesTest;
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.types.LinkType;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class DeepLinkHomeConverterTest {
-    private final DeepLinkHomeConverter deepLinkHomeConverter = new DeepLinkHomeConverter();
+public class DeepLinkHomeConverterTest extends InjectPropertiesTest {
+    @SpyBean
+    private DeepLinkHomeConverter deepLinkHomeConverter;
 
     @Test
     public void testOutputLinkType() {

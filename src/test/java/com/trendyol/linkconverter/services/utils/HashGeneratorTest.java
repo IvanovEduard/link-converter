@@ -1,15 +1,18 @@
 package com.trendyol.linkconverter.services.utils;
 
+import com.trendyol.linkconverter.InjectPropertiesTest;
 import org.junit.Test;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.spy;
 
-public class HashGeneratorTest {
-    private final HashGenerator hashGenerator = spy(HashGenerator.class);
+
+public class HashGeneratorTest extends InjectPropertiesTest {
+    @SpyBean
+    private HashGenerator hashGenerator;
 
     private final static String WEB_LINK_PRODUCT = "https://www.trendyol.com/casio/saat-p-1925865?boutiqueId=439892&merchantId=105064";
 

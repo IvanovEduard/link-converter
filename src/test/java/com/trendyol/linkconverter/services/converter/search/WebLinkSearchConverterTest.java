@@ -1,24 +1,28 @@
 package com.trendyol.linkconverter.services.converter.search;
 
+import com.trendyol.linkconverter.InjectPropertiesTest;
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.types.LinkType;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Map;
 
-import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.WEB_LINK_PARAMETER_QUERY;
-import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.WEB_LINK_PATH_SEARCH;
+import static com.trendyol.linkconverter.services.converter.search.WebLinkSearchConverter.WEB_LINK_PATH_SEARCH;
+import static com.trendyol.linkconverter.services.utils.QueryConstants.WEB_LINK_PARAMETER_QUERY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class WebLinkSearchConverterTest {
-    private final WebLinkSearchConverter webLinkSearchConverter = new WebLinkSearchConverter();
+
+public class WebLinkSearchConverterTest extends InjectPropertiesTest {
+    @SpyBean
+    private WebLinkSearchConverter webLinkSearchConverter;
 
     private static final String DEEP_LINK = "ty://?Page=Search&Query=çocuk%20yemeği";
 
     @Test
     public void testOutputLinkType() {
-        assertThat(webLinkSearchConverter.outputLinkType(), is(LinkType.WEB_URL));
+        assertThat(webLinkSearchConverter.outputLinkType(), is(LinkType.WEB_LINK));
     }
 
     @Test
@@ -33,7 +37,7 @@ public class WebLinkSearchConverterTest {
 
     @Test
     public void testConvert() {
-        assertThat(webLinkSearchConverter.convert(DEEP_LINK), is(LinkDTO.of("https://www.trendyol.com/sr?q=çocuk%20yemeği", LinkType.WEB_URL)));
+        assertThat(webLinkSearchConverter.convert(DEEP_LINK), is(LinkDTO.of("https://www.trendyol.com/sr?q=çocuk%20yemeği", LinkType.WEB_LINK)));
     }
 
 }

@@ -11,27 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * Base abstract converter which include the main rules for build the converted link
+ * Base abstract converter which include the main rules for link building
  */
 public abstract class BaseLinkConverter {
-    public static final String BASE_DEEPLINK_SCHEME = "ty";
-    public static final String BASE_WEB_SCHEME = "https";
-    public static final String BASE_WEB_HOST = "www.trendyol.com";
-    public static final String APP_LINK_PARAMETER_PAGE = "Page";
-    public static final String APP_LINK_PARAMETER_CAMPAIGN_ID = "CampaignId";
-    public static final String APP_LINK_PARAMETER_CONTENT_ID = "ContentId";
-    public static final String APP_LINK_PARAMETER_MERCHANT_ID = "MerchantId";
-    public static final String WEB_LINK_PATH_BRAND = "brand";
-    public static final String WEB_LINK_PATH_SEARCH = "sr";
-    public static final String WEB_LINK_PARAMETER_CAMPAIGN_ID = "boutiqueId";
-    public static final String WEB_LINK_PATH_CONTENT_ID = "name-p-";
-    public static final String WEB_LINK_PARAMETER_MERCHANT_ID = "merchantId";
-
-    public static final String WEB_LINK_PARAMETER_QUERY = "q";
-    public static final String APP_LINK_PARAMETER_QUERY = "Query";
-
-    public static final String SYMBOL_SLASH = "/";
-    public static final String EMPTY_STR = "";
 
     /**
      * Building the link parameters

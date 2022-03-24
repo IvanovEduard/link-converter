@@ -74,7 +74,7 @@ public class LinkConverterProcessManager {
 
     /**
      * Fetch entity from DB with using cache.
-     * In case when the result is empty we throw the custom EntityIsMissingInDBException exception
+     * In case when the result is empty we throw the custom {@link EntityIsMissingInDBException} exception
      * for avoiding hold in cache the empty <b>Optional</b> element.
      * The exception throwing is located in initializing cache {@link LinkConverterProcessManager#loadingCache}
      * In case some unexpected error during data fetching we throw the exception from this method

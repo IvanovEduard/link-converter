@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * The link converting Controller.
+ * The main controller for get access to the API.
  */
 @Slf4j
 @RestController
@@ -37,7 +37,7 @@ public class LinkConverterController {
     public LinkDTO convertToDeeplink(@NonNull @Valid @RequestBody WebLinkToConvertDTO webLinkToConvertDTO) throws ExecutionException {
         String link = webLinkToConvertDTO.getLink();
         log.info("Start converting web link - {} to deeplink", link);
-        return linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(link, LinkType.WEB_URL));
+        return linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(link, LinkType.WEB_LINK));
     }
 
     /**

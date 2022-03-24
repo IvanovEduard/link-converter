@@ -10,8 +10,18 @@ import org.springframework.util.MultiValueMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.trendyol.linkconverter.services.utils.QueryConstants.*;
+
+/**
+ * In this class made overriding the basic methods for <b>web link</b> building which is used in abstract class
+ * {@link com.trendyol.linkconverter.services.converter.BaseLinkConverter}.
+ * the description of overriding methods see in BaseLinkConverter class.
+ */
 @Component
 public class WebLinkProductConverter extends BaseWebLinkConverter {
+    private static final String WEB_LINK_PATH_BRAND = "brand";
+    private static final String WEB_LINK_PATH_CONTENT_ID = "name-p-";
+    private static final String SYMBOL_SLASH = "/";
 
     @Override
     protected MultiValueMap<String, String> queryParameters(final String link) {
@@ -37,6 +47,6 @@ public class WebLinkProductConverter extends BaseWebLinkConverter {
 
     @Override
     protected LinkType outputLinkType() {
-        return LinkType.WEB_URL;
+        return LinkType.WEB_LINK;
     }
 }
