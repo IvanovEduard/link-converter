@@ -1,4 +1,4 @@
-package com.trendyol.linkconverter.services.router;
+package com.trendyol.linkconverter.services.executor;
 
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.services.LinkConverterProcessManager;

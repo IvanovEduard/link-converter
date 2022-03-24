@@ -3,10 +3,10 @@ package com.trendyol.linkconverter.services;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.trendyol.linkconverter.controllers.ErrorInterceptorController;
-import com.trendyol.linkconverter.db.service.LinksStorageDaoService;
+import com.trendyol.linkconverter.controllers.ErrorHandlerController;
+import com.trendyol.linkconverter.db.service.LinksStorageService;
 import com.trendyol.linkconverter.dto.LinkDTO;
-import com.trendyol.linkconverter.services.router.LinkConvertExecutor;
+import com.trendyol.linkconverter.services.executor.LinkConvertExecutor;
 import com.trendyol.linkconverter.services.utils.PageTypeDetector;
 import com.trendyol.linkconverter.services.validation.EntityIsMissingInDBException;
 import com.trendyol.linkconverter.types.LinkType;
@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class LinkConverterProcessManager {
-    private final LinksStorageDaoService linksStorageDaoService;
+    private final LinksStorageService linksStorageService;
     private final Map<PageType, LinkConvertExecutor> linkConvertExecutorMapper;
 
-    public LinkConverterProcessManager(List<LinkConvertExecutor> linkConvertExecutors, LinksStorageDaoService linksStorageDaoService) {
+    public LinkConverterProcessManager(List<LinkConvertExecutor> linkConvertExecutors, LinksStorageService linksStorageService) {
         this.linkConvertExecutorMapper = linkConvertExecutors.stream().collect(Collectors.toMap(LinkConvertExecutor::getPageType, Function.identity()));
-        this.linksStorageDaoService = linksStorageDaoService;
+        this.linksStorageService = linksStorageService;
     }
 
     private final LoadingCache<LinkDTO, Optional<LinkDTO>> loadingCache = CacheBuilder.newBuilder()
@@ -43,7 +43,7 @@ public class LinkConverterProcessManager {
             .build(new CacheLoader<>() {
                 @Override
                 public Optional<LinkDTO> load(final @NonNull LinkDTO linkDTO) throws EntityIsMissingInDBException {
-                    Optional<LinkDTO> linkDTOOptional = linksStorageDaoService.findResultOfConvertingByHashOfOriginalLink(linkDTO);
+                    Optional<LinkDTO> linkDTOOptional = linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO);
                     if (linkDTOOptional.isEmpty()) {
                         throw new EntityIsMissingInDBException();
                     }
@@ -67,7 +67,7 @@ public class LinkConverterProcessManager {
         }
         log.info("Start convert link - {} type - {}", linkDTO.getLink(), linkDTO.getLinkType());
         LinkDTO convertedLinkDTO = linkConvertExecutorMapper.get(PageTypeDetector.detectPageType(linkDTO.getLink())).convert(linkDTO);
-        linksStorageDaoService.saveResultOfConverting(linkDTO, convertedLinkDTO);
+        linksStorageService.saveResultOfConverting(linkDTO, convertedLinkDTO);
         log.info("Convert process finished successfully - {} type - {}", linkDTO.getLink(), linkDTO.getLinkType());
         return convertedLinkDTO;
     }
@@ -78,7 +78,7 @@ public class LinkConverterProcessManager {
      * for avoiding hold in cache the empty <b>Optional</b> element.
      * The exception throwing is located in initializing cache {@link LinkConverterProcessManager#loadingCache}
      * In case some unexpected error during data fetching we throw the exception from this method
-     * which should be handled in {@link ErrorInterceptorController#handleApplicationException(Exception, HandlerMethod)}
+     * which should be handled in {@link ErrorHandlerController#handleApplicationException(Exception, HandlerMethod)}
      *
      * @param linkDTO consist the link for converting, and the type linkType {@link LinkType}
      * @return fetched entity from DB

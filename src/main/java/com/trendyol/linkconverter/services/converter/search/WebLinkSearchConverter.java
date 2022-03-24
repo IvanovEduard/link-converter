@@ -1,13 +1,15 @@
 package com.trendyol.linkconverter.services.converter.search;
 
-import com.trendyol.linkconverter.services.converter.BaseLinkConverter;
+import com.trendyol.linkconverter.services.converter.BaseWebLinkConverter;
 import com.trendyol.linkconverter.types.LinkType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Component
-public class WebLinkSearchConverter extends BaseLinkConverter {
+public class WebLinkSearchConverter extends BaseWebLinkConverter {
 
     @Override
     protected LinkType outputLinkType() {
@@ -15,13 +17,15 @@ public class WebLinkSearchConverter extends BaseLinkConverter {
     }
 
     @Override
-    protected String buildBaseLink(String link) {
-        return BASE_WEB_URL + SYMBOL_SLASH + SYMBOL_QUESTION_MARK;
+    protected MultiValueMap<String, String> queryParameters(final String link) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Optional.ofNullable(getQueryParams(link).get(APP_LINK_PARAMETER_QUERY))
+                .ifPresent(value -> params.add(WEB_LINK_PARAMETER_QUERY, value));
+        return params;
     }
 
     @Override
-    protected String buildLinkParameters(final String link) {
-        Map<String, String> queryParams = getQueryParams(link);
-        return buildParamEqual(WEB_LINK_PARAMETER_QUERY, queryParams.get(APP_LINK_PARAMETER_QUERY));
+    protected String path(String link) {
+        return WEB_LINK_PATH_SEARCH;
     }
 }

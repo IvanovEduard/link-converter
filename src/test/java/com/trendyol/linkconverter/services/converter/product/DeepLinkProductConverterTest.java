@@ -2,10 +2,12 @@ package com.trendyol.linkconverter.services.converter.product;
 
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.types.LinkType;
+import com.trendyol.linkconverter.types.PageType;
 import org.junit.jupiter.api.Test;
 
-import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.BASE_DEEPLINK;
-import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.SYMBOL_QUESTION_MARK;
+import java.util.Map;
+
+import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -20,13 +22,13 @@ public class DeepLinkProductConverterTest {
     }
 
     @Test
-    public void buildBaseLink() {
-        assertThat(deepLinkProductConverter.buildBaseLink(WEB_LINK), is(BASE_DEEPLINK + SYMBOL_QUESTION_MARK));
-    }
-
-    @Test
     public void buildLinkParameters() {
-        assertThat(deepLinkProductConverter.buildLinkParameters(WEB_LINK), is("Page=Product&ContentId=1925865&MerchantId=105064"));
+        Map<String, String> expectedResult = Map.of(
+                APP_LINK_PARAMETER_PAGE, PageType.PRODUCT.getAppValue(),
+                APP_LINK_PARAMETER_CONTENT_ID, "1925865",
+                APP_LINK_PARAMETER_MERCHANT_ID, "105064"
+        );
+        assertThat(deepLinkProductConverter.queryParameters(WEB_LINK).toSingleValueMap(), is(expectedResult));
     }
 
     @Test

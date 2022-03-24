@@ -1,9 +1,9 @@
 package com.trendyol.linkconverter.services;
 
-import com.trendyol.linkconverter.db.service.LinksStorageDaoService;
+import com.trendyol.linkconverter.db.service.LinksStorageService;
 import com.trendyol.linkconverter.dto.LinkDTO;
-import com.trendyol.linkconverter.services.router.LinkConvertExecutor;
-import com.trendyol.linkconverter.services.router.ProductLinkConvertExecutor;
+import com.trendyol.linkconverter.services.executor.LinkConvertExecutor;
+import com.trendyol.linkconverter.services.executor.ProductLinkConvertExecutor;
 import com.trendyol.linkconverter.types.LinkType;
 import com.trendyol.linkconverter.types.PageType;
 import org.junit.Before;
@@ -28,7 +28,7 @@ public class LinkConverterProcessManagerTest {
     @InjectMocks
     private LinkConverterProcessManager linkConverterProcessManager;
     @Mock
-    private LinksStorageDaoService linksStorageDaoService;
+    private LinksStorageService linksStorageService;
     @Mock
     private List<LinkConvertExecutor> linkConvertExecutors;
     @Mock
@@ -44,7 +44,7 @@ public class LinkConverterProcessManagerTest {
 
     @Before
     public void setUp() {
-        ReflectionTestUtils.setField(linkConverterProcessManager, "linkConvertRoutersMapper", Map.of(PageType.PRODUCT, productLinkConvertRouter));
+        ReflectionTestUtils.setField(linkConverterProcessManager, "linkConvertExecutorMapper", Map.of(PageType.PRODUCT, productLinkConvertRouter));
     }
 
     @Test
@@ -52,11 +52,11 @@ public class LinkConverterProcessManagerTest {
         LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL);
         LinkDTO convertedLinkDTO = LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK);
         when(productLinkConvertRouter.convert(linkDTO)).thenReturn(convertedLinkDTO);
-        when(linksStorageDaoService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.empty());
+        when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.empty());
 
         LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL));
 
-        verify(linksStorageDaoService).saveResultOfConverting(linkDTO, convertedLinkDTO);
+        verify(linksStorageService).saveResultOfConverting(linkDTO, convertedLinkDTO);
         assertThat(result, is(convertedLinkDTO));
     }
 
@@ -64,11 +64,11 @@ public class LinkConverterProcessManagerTest {
     public void testWhenLinkExistInDB() throws ExecutionException {
         LinkDTO linkDTO = LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL);
         LinkDTO convertedLinkDTO = LinkDTO.of(DEEP_LINK_TEST, LinkType.DEEP_LINK);
-        when(linksStorageDaoService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.of(convertedLinkDTO));
+        when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO)).thenReturn(Optional.of(convertedLinkDTO));
 
         LinkDTO result = linkConverterProcessManager.startLinkConvertProcesses(LinkDTO.of(WEB_LINK_TEST, LinkType.WEB_URL));
 
-        verify(linksStorageDaoService, never()).saveResultOfConverting(linkDTO, convertedLinkDTO);
+        verify(linksStorageService, never()).saveResultOfConverting(linkDTO, convertedLinkDTO);
         verify(productLinkConvertRouter, never()).convert(linkDTO);
         assertThat(result, is(convertedLinkDTO));
     }
@@ -83,16 +83,16 @@ public class LinkConverterProcessManagerTest {
         when(productLinkConvertRouter.convert(linkDTO2)).thenReturn(convertedLinkDTO2);
         when(productLinkConvertRouter.convert(linkDTO3)).thenReturn(convertedLinkDTO3);
 
-        when(linksStorageDaoService.findResultOfConvertingByHashOfOriginalLink(linkDTO2)).thenReturn(Optional.empty()).thenReturn(Optional.of(convertedLinkDTO2));
-        when(linksStorageDaoService.findResultOfConvertingByHashOfOriginalLink(linkDTO3)).thenReturn(Optional.empty()).thenReturn(Optional.of(convertedLinkDTO3));
+        when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO2)).thenReturn(Optional.empty()).thenReturn(Optional.of(convertedLinkDTO2));
+        when(linksStorageService.findResultOfConvertingByHashOfOriginalLink(linkDTO3)).thenReturn(Optional.empty()).thenReturn(Optional.of(convertedLinkDTO3));
 
         LinkDTO result2 = linkConverterProcessManager.startLinkConvertProcesses(linkDTO2);
         linkConverterProcessManager.startLinkConvertProcesses(linkDTO3);
         linkConverterProcessManager.startLinkConvertProcesses(linkDTO3);
         LinkDTO result3 = linkConverterProcessManager.startLinkConvertProcesses(linkDTO3);
 
-        verify(linksStorageDaoService).saveResultOfConverting(linkDTO2, convertedLinkDTO2);
-        verify(linksStorageDaoService).saveResultOfConverting(linkDTO3, convertedLinkDTO3); // remember that by default times for verify() method is eq 1, here we check that saveResultOfConverting called 1 time for linkDTO3
+        verify(linksStorageService).saveResultOfConverting(linkDTO2, convertedLinkDTO2);
+        verify(linksStorageService).saveResultOfConverting(linkDTO3, convertedLinkDTO3); // remember that by default times for verify() method is eq 1, here we check that saveResultOfConverting called 1 time for linkDTO3
         verify(productLinkConvertRouter).convert(linkDTO2);
         verify(productLinkConvertRouter).convert(linkDTO3);
         assertThat(result2, is(convertedLinkDTO2));

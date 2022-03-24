@@ -1,8 +1,11 @@
 package com.trendyol.linkconverter.services.converter.product;
 
 import com.trendyol.linkconverter.dto.LinkDTO;
+import com.trendyol.linkconverter.services.converter.BaseLinkConverter;
 import com.trendyol.linkconverter.types.LinkType;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -19,13 +22,13 @@ public class WebLinkProductConverterTest {
     }
 
     @Test
-    public void testBuildBaseLink() {
-        assertThat(webLinkProductConverter.buildBaseLink(DEEP_LINK), is("https://www.trendyol.com/brand/name-p-1925865"));
+    public void testBuildPath() {
+        assertThat(webLinkProductConverter.path(DEEP_LINK), is("brand/name-p-1925865"));
     }
 
     @Test
     public void testBuildLinkParameters() {
-        assertThat(webLinkProductConverter.buildLinkParameters(DEEP_LINK), is("?merchantId=105064"));
+        assertThat(webLinkProductConverter.queryParameters(DEEP_LINK).toSingleValueMap(), is(Map.of(BaseLinkConverter.WEB_LINK_PARAMETER_MERCHANT_ID, "105064")));
     }
 
     @Test

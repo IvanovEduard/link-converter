@@ -1,17 +1,17 @@
 package com.trendyol.linkconverter.services.converter.search;
 
-import com.trendyol.linkconverter.services.converter.BaseLinkConverter;
+import com.trendyol.linkconverter.services.converter.BaseDeepLinkConverter;
 import com.trendyol.linkconverter.types.LinkType;
 import com.trendyol.linkconverter.types.PageType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
-import java.util.StringJoiner;
-
-import static java.util.Objects.nonNull;
+import java.util.Optional;
 
 @Component
-public class DeepLinkSearchConverter extends BaseLinkConverter {
+public class DeepLinkSearchConverter extends BaseDeepLinkConverter {
 
     @Override
     protected LinkType outputLinkType() {
@@ -19,19 +19,12 @@ public class DeepLinkSearchConverter extends BaseLinkConverter {
     }
 
     @Override
-    protected String buildBaseLink(String link) {
-        return BASE_DEEPLINK + SYMBOL_QUESTION_MARK;
-    }
-
-    @Override
-    protected String buildLinkParameters(final String link) {
-        Map<String, String> queryParams = getQueryParams(link);
-
-        StringJoiner stringBuilder = new StringJoiner(SYMBOL_AMPERSAND);
-        stringBuilder.add(buildParamEqual(APP_LINK_PARAMETER_PAGE, PageType.SEARCH.getAppValue()));
-        if (nonNull(queryParams.get(WEB_LINK_PARAMETER_QUERY))) {
-            stringBuilder.add(buildParamEqual(APP_LINK_PARAMETER_QUERY, queryParams.get(WEB_LINK_PARAMETER_QUERY)));
-        }
-        return stringBuilder.toString();
+    protected MultiValueMap<String, String> queryParameters(final String link) {
+        Map<String, String> webLinkQueryParams = getQueryParams(link);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(APP_LINK_PARAMETER_PAGE, PageType.SEARCH.getAppValue());
+        Optional.ofNullable(webLinkQueryParams.get(WEB_LINK_PARAMETER_QUERY))
+                .ifPresent(value -> params.add(APP_LINK_PARAMETER_QUERY, value));
+        return params;
     }
 }

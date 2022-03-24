@@ -3,14 +3,16 @@ package com.trendyol.linkconverter.services.converter.home;
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.types.LinkType;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.LinkedMultiValueMap;
 
-import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.BASE_WEB_URL;
 import static com.trendyol.linkconverter.services.converter.BaseLinkConverter.EMPTY_STR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class WebLinkHomeConverterTest {
     private final WebLinkHomeConverter webLinkHomeConverter = new WebLinkHomeConverter();
+
+    private static final String BASE_WEB_URL = "https://www.trendyol.com";
 
     @Test
     public void testOutputLinkType() {
@@ -19,12 +21,7 @@ public class WebLinkHomeConverterTest {
 
     @Test
     public void testBuildBaseLink() {
-        assertThat(webLinkHomeConverter.buildBaseLink(EMPTY_STR), is(BASE_WEB_URL));
-    }
-
-    @Test
-    public void testBuildLinkParameters() {
-        assertThat(webLinkHomeConverter.buildLinkParameters(EMPTY_STR), is(EMPTY_STR));
+        assertThat(webLinkHomeConverter.queryParameters(EMPTY_STR), is(new LinkedMultiValueMap<>()));
     }
 
     @Test

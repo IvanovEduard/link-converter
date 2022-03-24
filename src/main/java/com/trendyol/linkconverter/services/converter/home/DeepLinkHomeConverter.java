@@ -1,12 +1,14 @@
 package com.trendyol.linkconverter.services.converter.home;
 
-import com.trendyol.linkconverter.services.converter.BaseLinkConverter;
+import com.trendyol.linkconverter.services.converter.BaseDeepLinkConverter;
 import com.trendyol.linkconverter.types.LinkType;
 import com.trendyol.linkconverter.types.PageType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @Component
-public class DeepLinkHomeConverter extends BaseLinkConverter {
+public class DeepLinkHomeConverter extends BaseDeepLinkConverter {
 
     @Override
     protected LinkType outputLinkType() {
@@ -14,12 +16,9 @@ public class DeepLinkHomeConverter extends BaseLinkConverter {
     }
 
     @Override
-    protected String buildBaseLink(String link) {
-        return BASE_DEEPLINK;
-    }
-
-    @Override
-    protected String buildLinkParameters(String link) {
-        return SYMBOL_QUESTION_MARK + buildParamEqual(APP_LINK_PARAMETER_PAGE, PageType.HOME.getAppValue());
+    protected MultiValueMap<String, String> queryParameters(String link) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(APP_LINK_PARAMETER_PAGE, PageType.HOME.getAppValue());
+        return params;
     }
 }

@@ -2,7 +2,7 @@ package com.trendyol.linkconverter.db.service.impl;
 
 import com.trendyol.linkconverter.db.entity.LinksStorage;
 import com.trendyol.linkconverter.db.repository.LinksStorageRepository;
-import com.trendyol.linkconverter.db.service.LinksStorageDaoService;
+import com.trendyol.linkconverter.db.service.LinksStorageService;
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.services.utils.HashGenerator;
 import com.trendyol.linkconverter.types.LinkType;
@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
  */
 @Repository
 @RequiredArgsConstructor
-public class LinksStorageDaoServiceImpl implements LinksStorageDaoService {
+public class LinksStorageServiceImpl implements LinksStorageService {
     private final LinksStorageRepository linksStorageRepository;
     private final HashGenerator hashGenerator;
 

@@ -5,13 +5,16 @@ import com.trendyol.linkconverter.db.repository.LinksStorageRepository;
 import com.trendyol.linkconverter.dto.LinkDTO;
 import com.trendyol.linkconverter.services.utils.HashGenerator;
 import com.trendyol.linkconverter.types.LinkType;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.containers.GenericContainer;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,20 +24,28 @@ import static org.hamcrest.Matchers.nullValue;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Import({
-        com.trendyol.linkconverter.db.service.impl.LinksStorageDaoServiceImpl.class,
+        LinksStorageServiceImpl.class,
         com.trendyol.linkconverter.services.utils.HashGenerator.class
 })
-public class LinksStorageDaoServiceImplIntegrationTest {
+public class LinksStorageServiceImplIntegrationTest {
     @Autowired
     private LinksStorageRepository linksStorageRepository;
 
     @Autowired
-    private LinksStorageDaoServiceImpl linksStorageDaoService;
+    private LinksStorageServiceImpl linksStorageDaoService;
     @Autowired
     private HashGenerator hashGenerator;
 
-    private static final String WEB_LINK = "https://www.trendyol.com/brand/name-p-1925865?boutiqueId=439892&merchantId=1050";
-    private static final String DEEP_LINK = "ty://?Page=Product&ContentId=1925865&CampaignId=439892&MerchantId=105064";
+    @ClassRule
+    public static GenericContainer simpleWebServer = new GenericContainer("mysql")
+            .withExposedPorts(33060)
+            .withEnv(Map.of(
+                    "MYSQL_ALLOW_EMPTY_PASSWORD", "true",
+                    "MYSQL_DATABASE", "trendyol_db"
+            ));
+
+    private static final String WEB_LINK = "https://www.trendyol.com/sr?q=çocuk%20yemeği";
+    private static final String DEEP_LINK = "ty://?Page=Search&Query=çocuk%20yemeği";
 
     @Test
     public void testSaveResultOfConverting() {
