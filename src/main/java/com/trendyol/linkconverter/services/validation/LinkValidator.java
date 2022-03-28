@@ -35,9 +35,7 @@ public class LinkValidator implements ConstraintValidator<ValidateLink, String> 
     public boolean isValid(String link, ConstraintValidatorContext constraintValidatorContext) {
         if (StringUtils.hasLength(link)) {
             UriComponents uriComponents = UriComponentsBuilder.fromUriString(link).build();
-            String host = uriComponents.getHost();
-            String scheme = uriComponents.getScheme();
-            return this.protocol.equals(scheme) && this.host.equals(host);
+            return this.protocol.equals(uriComponents.getScheme()) && this.host.equals(uriComponents.getHost());
         }
         return true;
     }
