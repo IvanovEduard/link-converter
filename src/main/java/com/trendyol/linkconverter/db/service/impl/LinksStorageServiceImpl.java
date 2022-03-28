@@ -4,6 +4,7 @@ import com.trendyol.linkconverter.db.entity.LinksStorage;
 import com.trendyol.linkconverter.db.repository.LinksStorageRepository;
 import com.trendyol.linkconverter.db.service.LinksStorageService;
 import com.trendyol.linkconverter.dto.LinkDTO;
+import com.trendyol.linkconverter.services.cache.CacheService;
 import com.trendyol.linkconverter.services.utils.HashGenerator;
 import com.trendyol.linkconverter.types.LinkType;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import static java.util.Objects.nonNull;
  */
 @Repository
 @RequiredArgsConstructor
-public class LinksStorageServiceImpl implements LinksStorageService {
+public class LinksStorageServiceImpl implements LinksStorageService, CacheService<LinkDTO, LinkDTO> {
     private final LinksStorageRepository linksStorageRepository;
     private final HashGenerator hashGenerator;
 
@@ -95,5 +96,10 @@ public class LinksStorageServiceImpl implements LinksStorageService {
             linksStorage.setRelatedLinkId(relatedId);
             return linksStorage;
         });
+    }
+
+    @Override
+    public LinkDTO getData(LinkDTO key) {
+        return findResultOfConvertingByHashOfOriginalLink(key).orElse(null);
     }
 }
