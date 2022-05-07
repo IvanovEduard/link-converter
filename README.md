@@ -35,7 +35,10 @@ You can up the application in a few ways:
 
 1.
 * ./mvnw clean install -DskipTests
-* docker compose up --build
+* docker-compose up --build
+
+when run with prod env params use 
+* docker-compose --env-file .env-prod up
   
 
 Will be run <b>mysql</b> DB and <b>App</b> containers. 

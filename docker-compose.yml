@@ -4,15 +4,21 @@ networks:
 
 services:
   db:
-    image: "mysql:latest"
+    image: "mysql:5.7"
+    restart: always
     container_name: db
     ports:
-      - "33060:3306"
+      - "${MYSQL_PORT_EXTERNAL}:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./docker/mysql/init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: root
+#      MYSQL_ALLOW_EMPTY_PASSWORD: true
       MYSQL_USER: test
       MYSQL_PASSWORD: test
-      MYSQL_DATABASE: trendyol_db
+#      MYSQL_DATABASE: trendyol_db
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 10s
@@ -35,7 +41,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/trendyol_db?characterEncoding=UTF8
     networks:
       - test-network
-
+volumes:
+  mysql:
+    driver: local
 
 
 
