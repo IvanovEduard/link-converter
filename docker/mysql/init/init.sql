@@ -23,9 +23,7 @@ CREATE TABLE `hibernate_sequence` (
     `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO trendyol_db_test.hibernate_sequence
-(next_val)
-VALUES0(1);
+INSERT INTO `hibernate_sequence` (next_val) VALUES(1);
 
 
 

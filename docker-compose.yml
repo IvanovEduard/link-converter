@@ -34,11 +34,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./src/main/resources/application.yml:/src/main/resources/application.yml
     environment:
       - SPRING_DATASOURCE_USERNAME=test
       - SPRING_DATASOURCE_PASSWORD=test
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/trendyol_db?characterEncoding=UTF8
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/trendyol_db_test?characterEncoding=UTF8
+      - SPRING_PROFILES_ACTIVE=dev
+#      - JAVA_OPTS=-Dspring.config.location=/src/main/resources/application.yml
     networks:
       - test-network
 volumes:
